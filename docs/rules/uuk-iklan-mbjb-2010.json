@@ -1,0 +1,247 @@
+{
+  "rule_set_id": "MBJB-LESEN-IKLAN",
+  "rule_set_name": "Lesen Premis Perniagaan & Iklan — Majlis Bandaraya Johor Bahru",
+  "version": "2010.1-draft",
+  "primary_source": "Undang-Undang Kecil Pelesenan Iklan (Majlis Bandaraya Johor Bahru) 2010",
+  "secondary_sources": [
+    "Notis Peringatan / Garis Panduan Papan Iklan Premis, MBJB (published 2025-07)",
+    "Borang Permohonan Lesen Premis Perniagaan dan Iklan, MBJB",
+    "Akta Kerajaan Tempatan 1976 (Akta 171)"
+  ],
+  "_IMPORTANT": "Every rule carries verification_status. Anything not 'verified_against_bylaw_text' must be confirmed with MBJB Bahagian Pelesenan before this is shown to MBJB as authoritative. Do not silently promote a rule to verified.",
+
+  "autonomy_tiers": {
+    "auto": "Objective and measurable from extracted observations. Engine decides; officer may override.",
+    "recommend": "Engine produces a finding; case cannot advance until an officer acknowledges it.",
+    "escalate": "Engine declines to determine. Officer decides, with retrieved context supplied."
+  },
+
+  "document_checklist": [
+    {
+      "doc_id": "DOC-SSM",
+      "label": "Business or company registration (SSM)",
+      "also_accepts": ["M&A", "Form 24", "Form 49", "Form 13 (change of company name)"],
+      "mandatory": true,
+      "verification_status": "verified_against_mbjb_form"
+    },
+    {
+      "doc_id": "DOC-CUKAI",
+      "label": "Latest paid property tax (cukai harta) receipt for the current year",
+      "mandatory": true,
+      "verification_status": "verified_against_mbjb_form"
+    },
+    {
+      "doc_id": "DOC-ID",
+      "label": "Identity document — MyKad for citizens, passport for non-citizens",
+      "mandatory": true,
+      "verification_status": "verified_against_mbjb_form"
+    },
+    {
+      "doc_id": "DOC-SIGNBOARD",
+      "label": "Signboard artwork or visual, showing all text and dimensions",
+      "mandatory": true,
+      "notes": "Required by this system as the input to signboard analysis. Confirm MBJB's own submission requirement.",
+      "verification_status": "inferred_confirm_with_mbjb"
+    },
+    {
+      "doc_id": "DOC-DBP",
+      "label": "Dewan Bahasa dan Pustaka (DBP) verification or approval of signboard content and visual",
+      "mandatory": true,
+      "verification_status": "verified_against_mbjb_guideline",
+      "notes": "MBJB guideline states all signage content/visuals require DBP approval. Treated as an applicant-supplied document in this POC; no DBP API integration."
+    },
+    {
+      "doc_id": "DOC-PREMISE",
+      "label": "Proof of premise occupation — tenancy agreement or ownership document",
+      "mandatory": true,
+      "verification_status": "inferred_confirm_with_mbjb"
+    },
+    {
+      "doc_id": "DOC-FLOORPLAN",
+      "label": "Premise floor plan or layout showing floor area",
+      "mandatory": false,
+      "verification_status": "inferred_confirm_with_mbjb"
+    }
+  ],
+
+  "rules": [
+    {
+      "rule_id": "SIGN-LANG-001",
+      "title": "National language must appear on the signboard",
+      "parameter": "signboard.has_national_language_text",
+      "operator": "is_true",
+      "threshold": true,
+      "tier": "auto",
+      "severity": "critical",
+      "citation": "UUK Pelesenan Iklan (MBJB) 2010 — bahasa kebangsaan hendaklah digunapakai bagi semua jenis iklan, sama ada secara sendiri atau bersama-sama dengan apa-apa bahasa lain",
+      "corrective_action_template": "Add Bahasa Melayu text to the signboard. The national language is mandatory on all advertisements, whether alone or alongside another language.",
+      "verification_status": "verified_against_bylaw_text"
+    },
+    {
+      "rule_id": "SIGN-SIZE-001",
+      "title": "The displayed business name or brand must be the largest text on the board",
+      "parameter": "signboard.primary_display_run_is_largest",
+      "operator": "is_true",
+      "threshold": true,
+      "tier": "auto",
+      "severity": "major",
+      "citation": "UUK Pelesenan Iklan (MBJB) 2010 — a business may choose whether the business name or the sales brand is displayed, and the size of that wording must be larger than the other wording on the signboard",
+      "corrective_action_template": "Increase the {primary_run} text so it is larger than every other text element on the signboard. Currently {largest_run} is larger.",
+      "verification_status": "verified_against_bylaw_text"
+    },
+    {
+      "rule_id": "SIGN-SIZE-002",
+      "title": "Non-national-language script must not exceed three-quarters of the business name lettering",
+      "parameter": "signboard.max_other_language_glyph_ratio",
+      "operator": "max_ratio",
+      "threshold": 0.75,
+      "basis": "glyph height of the registered business name text run",
+      "tier": "auto",
+      "severity": "major",
+      "citation": "UUK Pelesenan Iklan (MBJB) 2010 — for a business registered in another language such as Chinese or Tamil, the lettering size of the advertisement must not exceed three-quarters (3/4) of the lettering size of the business name",
+      "corrective_action_template": "Reduce the {script} lettering to no more than 75% of the business name lettering height. Measured ratio is {measured_ratio}, which exceeds the 0.75 limit.",
+      "notes": "FLAGSHIP DEMO RULE. Measurable directly from glyph heights. Unit-test both sides of the boundary: 0.74 pass, 0.75 pass (inclusive), 0.76 fail. Confirm inclusivity with MBJB.",
+      "verification_status": "verified_against_bylaw_text"
+    },
+    {
+      "rule_id": "SIGN-NAME-001",
+      "title": "Registered business name must be retained as written in the other language",
+      "parameter": "signboard.registered_name_retained",
+      "operator": "officer_determination",
+      "tier": "escalate",
+      "severity": "major",
+      "citation": "UUK Pelesenan Iklan (MBJB) 2010 — the business name as registered and written in other languages must be retained",
+      "escalation_reason": "Requires comparing signboard text against the SSM registration document; transliteration judgement is not safely automatable.",
+      "verification_status": "verified_against_bylaw_text"
+    },
+    {
+      "rule_id": "SIGN-LANG-002",
+      "title": "Bahasa Melayu wording, spelling and grammar must be correct",
+      "parameter": "signboard.national_language_correctness",
+      "operator": "officer_determination",
+      "tier": "escalate",
+      "severity": "major",
+      "citation": "UUK Pelesenan Iklan (MBJB) 2010 — the wording, sentence structure, spelling, grammar and vocabulary of the national language on a business signboard must be correct and accurate, and approved by the Datuk Bandar or an authorised officer",
+      "corrective_action_template": "Amend the signboard to correct the Bahasa Melayu errors identified, within the period stated in the Council's written notice.",
+      "notes": "The Copilot may SUGGEST suspected errors as advisory context, clearly labelled as unverified. The determination is the officer's, and DBP verification is the formal channel.",
+      "verification_status": "verified_against_bylaw_text"
+    },
+    {
+      "rule_id": "SIGN-IP-001",
+      "title": "Trademark, logo, label or slogan requires Datuk Bandar approval",
+      "parameter": "signboard.has_trademark_logo_label_or_slogan",
+      "operator": "if_true_then_escalate",
+      "tier": "escalate",
+      "severity": "advisory",
+      "citation": "UUK Pelesenan Iklan (MBJB) 2010 — a trademark, logo, label or slogan on a business signboard must be used with the approval of the Datuk Bandar or an authorised officer",
+      "escalation_reason": "Approval is a discretionary act reserved to the Datuk Bandar or an authorised officer.",
+      "verification_status": "verified_against_bylaw_text"
+    },
+    {
+      "rule_id": "SIGN-DBP-001",
+      "title": "DBP verification of signboard content and visual must be evidenced",
+      "parameter": "documents.DOC-DBP.present",
+      "operator": "is_true",
+      "threshold": true,
+      "tier": "auto",
+      "severity": "critical",
+      "citation": "MBJB Garis Panduan Papan Iklan Premis — all signboard content and visuals require Dewan Bahasa dan Pustaka approval",
+      "corrective_action_template": "Obtain and upload DBP verification of the signboard content and visual before the application can proceed.",
+      "verification_status": "verified_against_mbjb_guideline"
+    },
+    {
+      "rule_id": "SIGN-DIM-001",
+      "title": "Premise signboard dimensions must not exceed the permitted size",
+      "parameter": "signboard.dimensions_m",
+      "operator": "max_dimensions",
+      "threshold": { "width_m": 6.096, "height_m": 1.219, "imperial_equivalent": "20 ft x 4 ft" },
+      "tier": "recommend",
+      "severity": "major",
+      "citation": "MBJB Borang Permohonan Lesen Premis Perniagaan dan Iklan — counter checklist states only 20 ft x 4 ft is permitted",
+      "corrective_action_template": "Reduce the signboard to within {threshold_imperial}. Submitted size is {measured}.",
+      "notes": "Sourced from the form's checklist page rather than the by-law text itself, and may be a default rather than an absolute cap, and may vary by premise type or storey count. Tier is 'recommend' not 'auto' for that reason. MUST be confirmed with MBJB Bahagian Pelesenan.",
+      "verification_status": "inferred_confirm_with_mbjb"
+    },
+    {
+      "rule_id": "SIGN-ACT-001",
+      "title": "Business activity must be shown on the signboard in the national language",
+      "parameter": "signboard.activity_run_in_national_language",
+      "operator": "is_true",
+      "threshold": true,
+      "tier": "recommend",
+      "severity": "major",
+      "citation": "MBJB Borang Permohonan Lesen Premis Perniagaan dan Iklan — the business activity must be in the national language",
+      "corrective_action_template": "State the business activity on the signboard in Bahasa Melayu.",
+      "verification_status": "verified_against_mbjb_form"
+    },
+    {
+      "rule_id": "DOC-COMPLETE-001",
+      "title": "All mandatory supporting documents must be present and legible",
+      "parameter": "documents.mandatory_all_present_and_legible",
+      "operator": "is_true",
+      "threshold": true,
+      "tier": "auto",
+      "severity": "critical",
+      "citation": "MBJB Borang Permohonan Lesen Premis Perniagaan dan Iklan — supporting documents checklist",
+      "corrective_action_template": "Upload the following before resubmitting: {missing_list}.",
+      "verification_status": "verified_against_mbjb_form"
+    },
+    {
+      "rule_id": "DOC-CONSIST-001",
+      "title": "Applicant and premise details must be consistent across documents",
+      "parameter": "documents.cross_field_consistency",
+      "operator": "all_match",
+      "fields": [
+        "company_name: form vs SSM document",
+        "premise_address: form vs property tax receipt",
+        "applicant_name: form vs identity document",
+        "property_tax_account_no: form vs property tax receipt"
+      ],
+      "tier": "recommend",
+      "severity": "major",
+      "corrective_action_template": "Resolve the mismatch in {field}: the form states {form_value}, the supporting document states {doc_value}.",
+      "notes": "Mismatches are frequently legitimate (trading name vs registered name, unit numbering conventions). Never auto-reject on this; always route to an officer.",
+      "verification_status": "inferred_confirm_with_mbjb"
+    },
+    {
+      "rule_id": "BIZ-RISK-001",
+      "title": "High-risk business activity requires referral and additional guideline compliance",
+      "parameter": "application.business_activity_risk_tier",
+      "operator": "if_high_then_escalate",
+      "tier": "escalate",
+      "severity": "major",
+      "citation": "MBJB Garis Panduan Perniagaan Berisiko Tinggi — health service and entertainment activity categories",
+      "escalation_reason": "High-risk categories require referral to external agencies and compliance with a separate MBJB guideline outside this rule pack.",
+      "notes": "MBJB also publishes a separate guideline for budget hotels in terrace-shop premises. Out of scope for the POC; escalate rather than attempt.",
+      "verification_status": "inferred_confirm_with_mbjb"
+    }
+  ],
+
+  "confidence_thresholds": {
+    "signboard_glyph_measurement_min": 0.85,
+    "document_classification_min": 0.80,
+    "text_extraction_min": 0.75,
+    "_note": "Below threshold, emit an escalation instead of a finding. These are starting values and must be tuned against real submissions, not left at their defaults."
+  },
+
+  "demo_case": {
+    "_purpose": "The scripted live demonstration. Deliberately mixes clean passes, a measurable fail, and an escalation, so the audience sees the system decline as well as succeed.",
+    "business_name_registered": "Kedai Runcit Aman Jaya",
+    "signboard_runs": [
+      { "text": "KEDAI RUNCIT AMAN JAYA", "script": "latin", "language": "ms", "role": "business_name", "glyph_height_mm": 300 },
+      { "text": "安泰杂货店", "script": "han", "language": "zh", "role": "business_name_other_script", "glyph_height_mm": 258 },
+      { "text": "Barangan Runcit & Keperluan Harian", "script": "latin", "language": "ms", "role": "activity", "glyph_height_mm": 90 }
+    ],
+    "signboard_dimensions_m": { "width_m": 6.0, "height_m": 1.2 },
+    "expected_findings": [
+      { "rule_id": "SIGN-LANG-001", "status": "compliant" },
+      { "rule_id": "SIGN-SIZE-001", "status": "compliant" },
+      { "rule_id": "SIGN-SIZE-002", "status": "non_compliant", "measured_ratio": 0.86, "note": "258mm / 300mm = 0.86, exceeds the 0.75 limit. This is the finding the demo turns on." },
+      { "rule_id": "SIGN-DIM-001", "status": "compliant" },
+      { "rule_id": "SIGN-ACT-001", "status": "compliant" },
+      { "rule_id": "SIGN-DBP-001", "status": "non_compliant", "note": "DBP verification not uploaded on first submission." },
+      { "rule_id": "SIGN-LANG-002", "status": "escalated" },
+      { "rule_id": "SIGN-NAME-001", "status": "escalated" }
+    ]
+  }
+}
