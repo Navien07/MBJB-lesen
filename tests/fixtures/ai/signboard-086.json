@@ -1,0 +1,8 @@
+{
+  "text": "{\"runs\": [{\"text\": \"KEDAI RUNCIT AMAN JAYA\", \"script\": \"latin\", \"language\": \"ms\", \"role\": \"business_name\", \"relative_glyph_height\": 302, \"bbox\": {\"x\": 90, \"y\": 48, \"w\": 1290, \"h\": 91}, \"confidence\": 0.96}, {\"text\": \"安泰杂货店\", \"script\": \"han\", \"language\": \"zh\", \"role\": \"business_name_other_script\", \"relative_glyph_height\": 259, \"bbox\": {\"x\": 90, \"y\": 175, \"w\": 392, \"h\": 78}, \"confidence\": 0.95}, {\"text\": \"Barangan Runcit & Keperluan Harian\", \"script\": \"latin\", \"language\": \"ms\", \"role\": \"activity\", \"relative_glyph_height\": 91, \"bbox\": {\"x\": 90, \"y\": 298, \"w\": 430, \"h\": 28}, \"confidence\": 0.95}], \"has_trademark_logo_label_or_slogan\": false, \"overall_confidence\": 0.95, \"notes\": \"Clean artwork; Han glyphs measured across full character height.\", \"measurement_basis\": \"annotation\"}",
+  "model": "claude-opus-4-8",
+  "tokens": {
+    "input": 2140,
+    "output": 356
+  }
+}

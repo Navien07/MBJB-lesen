@@ -1,7 +1,9 @@
 # Session state
 
-**Last gate passed:** M2 (after M4) — auth via @supabase/ssr, middleware session refresh + auth gate, role gate in officer layout; applicant/officer/register flows proven by 5 Playwright tests. M4 done earlier: engine in `lib/rules/` (99%/98% coverage), demo case reproduces exactly, ¾ boundary inclusive.
-**Next gate:** M3 — Borang form, 7 document uploads to Storage, DRAFT→SUBMITTED + audit entry.
+**Last gate passed:** M6 (order so far: M0, M1, M4, M2, M3, M5, M6). Gateway in `lib/ai/gateway.ts` (redaction → mode dispatch → retry → token audit); intake agent on recorded fixtures; signboard agent with SVG-generated ground-truth boards in `tests/fixtures/signboards/`.
+**Next gate:** M7 — async job pipeline (worker advances one stage per invocation, client polls, demo case reaches ASSESSED matching M4 expectations, failed stage retries then parks).
+
+**M6 — the deviation that matters (also OPEN-QUESTIONS #10):** live check proved multimodal glyph-height *estimation* misses ±0.05 badly (Δ0.161/Δ0.328 at confidence ≈0.94). Tolerance NOT widened. Input contract changed: artwork must be an **annotated production proof** (per-run lettering heights printed on the proof). Model reads annotations (`measurement_basis:"annotation"`); estimates or unreadable proofs escalate. Live re-check: Δ0 on both boards, lowres escalates. Harness: `pnpm tsx --env-file=.env.local scripts/measure-signboard-live.ts` (3 real API calls).
 
 **M2 implementation notes:**
 - Playwright uses `channel: 'chrome'` (system Chrome): the FortiGate resets Playwright's browser CDN downloads; the bundled Chromium cannot be fetched on this network.

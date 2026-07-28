@@ -1,0 +1,5 @@
+{
+  "board_id": "board-lowres",
+  "note": "the 0.86 board at 96px wide, blurred — must escalate, never yield a ratio",
+  "expected_outcome": "escalation"
+}

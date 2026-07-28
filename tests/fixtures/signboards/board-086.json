@@ -1,0 +1,33 @@
+{
+  "board_id": "board-086",
+  "board_dimensions_m": {
+    "width_m": 6,
+    "height_m": 1.2
+  },
+  "units": "board millimetres; 1 SVG unit = 1mm",
+  "runs": [
+    {
+      "text": "KEDAI RUNCIT AMAN JAYA",
+      "script": "latin",
+      "language": "ms",
+      "role": "business_name",
+      "glyph_height_mm": 300
+    },
+    {
+      "text": "安泰杂货店",
+      "script": "han",
+      "language": "zh",
+      "role": "business_name_other_script",
+      "glyph_height_mm": 258
+    },
+    {
+      "text": "Barangan Runcit & Keperluan Harian",
+      "script": "latin",
+      "language": "ms",
+      "role": "activity",
+      "glyph_height_mm": 90
+    }
+  ],
+  "expected_ratio": 0.86,
+  "tolerance": 0.05
+}

@@ -17,6 +17,13 @@ export const SignboardResult = z.object({
     }),
   ),
   has_trademark_logo_label_or_slogan: z.boolean().nullable(),
+  /**
+   * Input contract (M6): heights must be READ from the proof's printed
+   * lettering-height annotations, never estimated visually. The live check
+   * proved visual estimation misses ±0.05 by a wide margin; 'estimate'
+   * therefore always escalates to an officer.
+   */
+  measurement_basis: z.enum(['annotation', 'estimate']),
   overall_confidence: z.number().min(0).max(1),
   notes: z.string().default(''),
 })

@@ -91,8 +91,9 @@ function simulateSignboard(payload: { filename?: string }): SignboardResult {
         },
       ],
       has_trademark_logo_label_or_slogan: null,
+      measurement_basis: 'estimate',
       overall_confidence: 0.35,
-      notes: 'Artwork resolution too low for reliable glyph measurement.',
+      notes: 'Artwork resolution too low to read the lettering-height annotations.',
     }
   }
 
@@ -129,6 +130,7 @@ function simulateSignboard(payload: { filename?: string }): SignboardResult {
         },
       ],
       has_trademark_logo_label_or_slogan: false,
+      measurement_basis: 'annotation',
       overall_confidence: 0.95,
       notes: '',
     }
@@ -165,6 +167,7 @@ function simulateSignboard(payload: { filename?: string }): SignboardResult {
       },
     ],
     has_trademark_logo_label_or_slogan: false,
+    measurement_basis: 'annotation',
     overall_confidence: 0.95,
     notes: '',
   }

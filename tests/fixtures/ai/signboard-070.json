@@ -1,0 +1,8 @@
+{
+  "text": "{\"runs\": [{\"text\": \"KEDAI RUNCIT AMAN JAYA\", \"script\": \"latin\", \"language\": \"ms\", \"role\": \"business_name\", \"relative_glyph_height\": 298, \"bbox\": {\"x\": 90, \"y\": 48, \"w\": 1290, \"h\": 90}, \"confidence\": 0.96}, {\"text\": \"安泰杂货店\", \"script\": \"han\", \"language\": \"zh\", \"role\": \"business_name_other_script\", \"relative_glyph_height\": 212, \"bbox\": {\"x\": 90, \"y\": 174, \"w\": 320, \"h\": 64}, \"confidence\": 0.94}, {\"text\": \"Barangan Runcit & Keperluan Harian\", \"script\": \"latin\", \"language\": \"ms\", \"role\": \"activity\", \"relative_glyph_height\": 92, \"bbox\": {\"x\": 90, \"y\": 264, \"w\": 430, \"h\": 28}, \"confidence\": 0.95}, {\"text\": \"\", \"script\": \"other\", \"language\": \"other\", \"role\": \"other\", \"relative_glyph_height\": 1, \"bbox\": null, \"confidence\": 0.9}], \"has_trademark_logo_label_or_slogan\": false, \"overall_confidence\": 0.94, \"notes\": \"Clean vector-like artwork; measured against run cap heights.\", \"measurement_basis\": \"annotation\"}",
+  "model": "claude-opus-4-8",
+  "tokens": {
+    "input": 2140,
+    "output": 388
+  }
+}

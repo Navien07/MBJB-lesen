@@ -1,0 +1,8 @@
+{
+  "text": "{\"runs\": [{\"text\": \"KEDAI R...T A..N J..A\", \"script\": \"latin\", \"language\": \"ms\", \"role\": \"business_name\", \"relative_glyph_height\": 5, \"bbox\": null, \"confidence\": 0.3}, {\"text\": \"(unreadable CJK)\", \"script\": \"han\", \"language\": \"zh\", \"role\": \"business_name_other_script\", \"relative_glyph_height\": 4, \"bbox\": null, \"confidence\": 0.2}], \"has_trademark_logo_label_or_slogan\": null, \"overall_confidence\": 0.25, \"notes\": \"Artwork is 96px wide and blurred; glyph edges cannot be resolved for measurement.\", \"measurement_basis\": \"estimate\"}",
+  "model": "claude-opus-4-8",
+  "tokens": {
+    "input": 640,
+    "output": 208
+  }
+}
