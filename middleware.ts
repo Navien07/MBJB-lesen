@@ -42,7 +42,4 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
-  // the supabase client pulls CJS that references __dirname, which the Edge
-  // runtime does not define — run on Node.js (Fluid) instead
-  runtime: 'nodejs',
 }
