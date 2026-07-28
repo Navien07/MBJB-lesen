@@ -8,3 +8,6 @@ coverage/
 test-results/
 playwright-report/
 .DS_Store
+/out/
+*.tsbuildinfo
+next-env.d.ts
