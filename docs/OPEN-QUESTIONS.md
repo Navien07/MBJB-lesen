@@ -24,3 +24,7 @@ Nothing here may be silently resolved by picking a value.
 ## Discovered during build
 
 _Claude Code appends below._
+
+| # | Question | Why it matters |
+|---|---|---|
+| 9 | New-format SSM registration numbers (12 digits, e.g. `202301012345`) are indistinguishable by pattern from an unhyphenated MyKad number, so the PII redactor masks them too. Over-redaction is the safe default (§1.7), but it removes the SSM number from what the intake model sees, weakening the form-vs-SSM-document cross-check. Options: exempt the `ssm_registration_no` field from NRIC masking (field-aware redaction), or accept the weaker check. Needs a decision on which risk MBJB prefers. | Affects `DOC-CONSIST-001` quality in live mode |
