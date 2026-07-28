@@ -58,7 +58,7 @@ test('rule versions are immutable once written', async () => {
   const svc = serviceClient()
   const { data, error } = await svc
     .from('rules')
-    .insert({ rule_set_id: 'TEST-IMMUTABLE', version: '1', pack: { rules: [] } })
+    .insert({ rule_set_id: 'TEST-IMMUTABLE', version: `run-${Date.now()}`, pack: { rules: [] } })
     .select('id')
     .single()
   if (error) throw error

@@ -57,11 +57,14 @@ export async function createUser(
     email,
     password,
     email_confirm: true,
+    user_metadata: { full_name: fullName },
   })
   if (error || !created.user) throw error ?? new Error('createUser returned no user')
+  // the signup trigger has already created an applicant profile; adjust role
   const { error: profileError } = await svc
     .from('profiles')
-    .insert({ id: created.user.id, role, full_name: fullName })
+    .update({ role, full_name: fullName })
+    .eq('id', created.user.id)
   if (profileError) throw profileError
 
   const client = anonClient()

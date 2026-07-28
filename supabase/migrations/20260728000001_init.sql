@@ -235,9 +235,16 @@ create policy applications_applicant_select on public.applications for select
   using (applicant_id = auth.uid() or public.current_role_is_officer());
 create policy applications_applicant_insert on public.applications for insert
   with check (applicant_id = auth.uid());
+-- USING gates which rows an applicant may touch (their own, still editable);
+-- WITH CHECK additionally permits the submission transition itself, since it
+-- evaluates the NEW row whose status is already SUBMITTED.
 create policy applications_applicant_update on public.applications for update
   using (
     (applicant_id = auth.uid() and status in ('DRAFT', 'DEFICIENT'))
+    or public.current_role_is_officer()
+  )
+  with check (
+    (applicant_id = auth.uid() and status in ('DRAFT', 'DEFICIENT', 'SUBMITTED'))
     or public.current_role_is_officer()
   );
 
