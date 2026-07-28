@@ -1,7 +1,7 @@
 # Session state
 
 **Last gate passed:** M7 (order so far: M0, M1, M4, M2, M3, M5, M6, M7). Worker in `lib/pipeline/worker.ts` — one stage per invocation, optimistic claim, retry×2 then park. Progress route `app/api/applications/[id]/progress` advances one tick per poll (job rows + polling, §5). Gate: `pnpm tsx scripts/e2e-pipeline.ts --fixture demo-case`.
-**Next gate:** M9 — dashboard (volume by status, top deficiencies, decision mix, override rate per rule PROMINENT) + audit replay view. M8 done: officer console at `/officer/cases/[id]` — severity-grouped findings, evidence dialog (signed artwork URL + observation runs), overrides live in the append-only audit log (action `finding.overridden` — this is also what the dashboard override-rate reads), decision + letter; terminal transitions additionally DB-guarded to only leave OFFICER_REVIEW (migration 0004).
+**Next gate:** M10 — remote migrations, vercel env, production deploy, remote seed (10 synthetic + demo case), @live smoke. M8 done: officer console at `/officer/cases/[id]` — severity-grouped findings, evidence dialog, overrides in the append-only audit log, decision + letter; terminal transitions DB-guarded to only leave OFFICER_REVIEW (migration 0004). M9 done: `/officer/dashboard` (override rate per rule is the FIRST card) + `/officer/cases/[id]/replay`.
 
 **M7 policy decisions (documented, not silent):**
 - Deficiency loop: a FIRST submission with missing mandatory docs halts DEFICIENT with a notice; a RESUBMISSION always advances, unresolved deficiencies flow to the officer as findings. This is the only policy satisfying both the E2E-PLAN deficiency row and the M7 "demo case reaches ASSESSED with DBP finding" gate.
