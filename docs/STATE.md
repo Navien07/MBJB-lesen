@@ -1,7 +1,22 @@
 # Session state
 
 **Last gate passed:** M7 (order so far: M0, M1, M4, M2, M3, M5, M6, M7). Worker in `lib/pipeline/worker.ts` — one stage per invocation, optimistic claim, retry×2 then park. Progress route `app/api/applications/[id]/progress` advances one tick per poll (job rows + polling, §5). Gate: `pnpm tsx scripts/e2e-pipeline.ts --fixture demo-case`.
-**Next gate:** M10 — remote migrations, vercel env, production deploy, remote seed (10 synthetic + demo case), @live smoke. M8 done: officer console at `/officer/cases/[id]` — severity-grouped findings, evidence dialog, overrides in the append-only audit log, decision + letter; terminal transitions DB-guarded to only leave OFFICER_REVIEW (migration 0004). M9 done: `/officer/dashboard` (override rate per rule is the FIRST card) + `/officer/cases/[id]/replay`.
+**Next gate:** M10 — BLOCKED ON ANTHROPIC CREDITS, everything else done. `./scripts/verify.sh` exits 0 (all local gates). Production is live at https://mbjb-lesen.vercel.app (migrations pushed, env set, seeded: demo officer `officer.demo@mbjb-lesen.local` + 10 synthetic cases + demo case). The @live smoke ran end-to-end in production — register, Borang, 7 uploads, submit all green — until the intake stage's real API call failed: **"credit balance is too low to access the Anthropic API"**. The job retried ×3 and parked (the failure handling proved itself in production). M6's live check earlier consumed the remaining balance.
+
+**To finish M10 after adding credits at console.anthropic.com:**
+```
+SERVICE=$(supabase projects api-keys --project-ref ugbfvxjmdgznriuuedvn -o json | jq -r '.[] | select(.name=="service_role").api_key')
+PLAYWRIGHT_BASE_URL="https://mbjb-lesen.vercel.app" \
+SUPABASE_URL="https://ugbfvxjmdgznriuuedvn.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="$SERVICE" \
+SMOKE_OFFICER_EMAIL="officer.demo@mbjb-lesen.local" \
+SMOKE_OFFICER_PASSWORD="<in .env.local>" \
+pnpm test:e2e:smoke
+```
+
+**M10 deploy fixes (each cost a round-trip):** Vercel project had `framework: null` (created while the dir was empty) → every route 404'd; set to `nextjs` via API. Vercel Authentication (SSO protection) was on → disabled via API. Middleware removed entirely — Vercel's wrapper 500'd on the supabase bundle (`__dirname`), and per-page `requireUser`/`requireOfficer` + RLS already enforce auth. `packageManager: pnpm@11.17.0` pinned so Vercel installs from the lockfile. Hosted GoTrue rejects `.local`/`example.com` signup emails — smoke uses gmail.com; remote autoconfirm is on.
+
+M8 done: officer console at `/officer/cases/[id]` — severity-grouped findings, evidence dialog, overrides in the append-only audit log, decision + letter; terminal transitions DB-guarded to only leave OFFICER_REVIEW (migration 0004). M9 done: `/officer/dashboard` (override rate per rule is the FIRST card) + `/officer/cases/[id]/replay`.
 
 **M7 policy decisions (documented, not silent):**
 - Deficiency loop: a FIRST submission with missing mandatory docs halts DEFICIENT with a notice; a RESUBMISSION always advances, unresolved deficiencies flow to the officer as findings. This is the only policy satisfying both the E2E-PLAN deficiency row and the M7 "demo case reaches ASSESSED with DBP finding" gate.

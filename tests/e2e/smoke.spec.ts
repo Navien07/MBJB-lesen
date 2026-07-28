@@ -51,7 +51,8 @@ test('@live the applicant-to-decision flow completes in production with real API
   const svc = createClient(svcUrl!, svcKey!, { auth: { persistSession: false } })
 
   // -- applicant registers and submits the demo case --------------------
-  const applicantEmail = `smoke-${Date.now()}@mbjb-lesen.local`
+  // hosted GoTrue rejects .local TLDs and reserved domains like example.com
+  const applicantEmail = `mbjb.smoke.${Date.now()}@gmail.com`
   await page.goto('/register')
   await page.getByLabel('Full name').fill('Aminah binti Salleh')
   await page.getByLabel('Email').fill(applicantEmail)
