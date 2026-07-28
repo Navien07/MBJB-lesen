@@ -1,7 +1,12 @@
 # Session state
 
-**Last gate passed:** M0 — Next.js 15.5.22, strict TS, Tailwind v4, ESLint 9; typecheck+lint+build clean; Supabase (`ugbfvxjmdgznriuuedvn`, ap-southeast-1) and Vercel (`mbjb-lesen`, Navien scope) linked; pushed.
-**Next gate:** M1 — schema, RLS, append-only audit_log, human-only terminal transitions, tests in `tests/db` against local Supabase.
+**Last gate passed:** M1 — full schema in `supabase/migrations/20260728000001_init.sql`; RLS on all 10 tables; append-only audit_log + immutable rules (trigger + revoked grants); terminal transitions human-officer-only via `applications_terminal_guard` (auth.uid() null for service role ⇒ workers physically blocked); 17 tests in `tests/db` green against local stack. Guard falsification done: trigger dropped → 2 tests red → restored → green.
+**Next gate:** M4 (rule engine — types.ts and derive.ts already written, engine.ts + tests pending), then back to M2/M3 UI. M4 before M2 because it is the load-bearing outcome and needs no UI.
+
+**M1 implementation notes:**
+- This CLI version (2.107) does not auto-grant DML on migration-created tables — explicit grants at the end of the init migration, with audit_log/rules UPDATE/DELETE revoked after.
+- `tests/db/helpers.ts` reads local keys via `supabase status -o env` (still emits ANON_KEY/SERVICE_ROLE_KEY alongside new-style keys).
+- Gate commands must use `set -o pipefail` when piping vitest to tail — a plain pipe swallows the exit code.
 
 **Deviations from spec:** none in product scope.
 
