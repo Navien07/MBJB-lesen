@@ -1,7 +1,12 @@
 # Session state
 
-**Last gate passed:** M1 — full schema in `supabase/migrations/20260728000001_init.sql`; RLS on all 10 tables; append-only audit_log + immutable rules (trigger + revoked grants); terminal transitions human-officer-only via `applications_terminal_guard` (auth.uid() null for service role ⇒ workers physically blocked); 17 tests in `tests/db` green against local stack. Guard falsification done: trigger dropped → 2 tests red → restored → green.
-**Next gate:** M4 (rule engine — types.ts and derive.ts already written, engine.ts + tests pending), then back to M2/M3 UI. M4 before M2 because it is the load-bearing outcome and needs no UI.
+**Last gate passed:** M2 (after M4) — auth via @supabase/ssr, middleware session refresh + auth gate, role gate in officer layout; applicant/officer/register flows proven by 5 Playwright tests. M4 done earlier: engine in `lib/rules/` (99%/98% coverage), demo case reproduces exactly, ¾ boundary inclusive.
+**Next gate:** M3 — Borang form, 7 document uploads to Storage, DRAFT→SUBMITTED + audit entry.
+
+**M2 implementation notes:**
+- Playwright uses `channel: 'chrome'` (system Chrome): the FortiGate resets Playwright's browser CDN downloads; the bundled Chromium cannot be fetched on this network.
+- Playwright injects local Supabase URL/keys into the dev server from `supabase status -o env` (see playwright.config.ts); tests are hermetic, no .env.local dependency.
+- Fixed test users provisioned idempotently in tests/e2e/support/global-setup.ts; officers are promoted by service role — signup can never mint one (profiles_role_guard trigger, migration 0002).
 
 **M1 implementation notes:**
 - This CLI version (2.107) does not auto-grant DML on migration-created tables — explicit grants at the end of the init migration, with audit_log/rules UPDATE/DELETE revoked after.
