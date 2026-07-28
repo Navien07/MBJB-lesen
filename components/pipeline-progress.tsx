@@ -44,7 +44,7 @@ export function PipelineProgress({ applicationId, initialStatus }: { application
         if (res.ok) {
           const next: Progress = (await res.json()) as Progress
           setProgress((prev) => {
-            if (prev && prev.status !== next.status) router.refresh()
+            if (next.status !== (prev?.status ?? initialStatus)) router.refresh()
             return next
           })
           if (!ACTIVE_STATUSES.includes(next.status)) return // settled; stop polling
