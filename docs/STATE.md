@@ -1,7 +1,12 @@
 # Session state
 
-**Last gate passed:** M6 (order so far: M0, M1, M4, M2, M3, M5, M6). Gateway in `lib/ai/gateway.ts` (redaction → mode dispatch → retry → token audit); intake agent on recorded fixtures; signboard agent with SVG-generated ground-truth boards in `tests/fixtures/signboards/`.
-**Next gate:** M7 — async job pipeline (worker advances one stage per invocation, client polls, demo case reaches ASSESSED matching M4 expectations, failed stage retries then parks).
+**Last gate passed:** M7 (order so far: M0, M1, M4, M2, M3, M5, M6, M7). Worker in `lib/pipeline/worker.ts` — one stage per invocation, optimistic claim, retry×2 then park. Progress route `app/api/applications/[id]/progress` advances one tick per poll (job rows + polling, §5). Gate: `pnpm tsx scripts/e2e-pipeline.ts --fixture demo-case`.
+**Next gate:** M8 — officer console (findings by severity, click-through evidence, override-with-reason, decision + letter).
+
+**M7 policy decisions (documented, not silent):**
+- Deficiency loop: a FIRST submission with missing mandatory docs halts DEFICIENT with a notice; a RESUBMISSION always advances, unresolved deficiencies flow to the officer as findings. This is the only policy satisfying both the E2E-PLAN deficiency row and the M7 "demo case reaches ASSESSED with DBP finding" gate.
+- demo_case.expected_findings is signboard-scoped; the full pipeline lawfully adds DOC-COMPLETE-001 (non_compliant, names DOC-DBP) and DOC-CONSIST-001 (compliant) because intake supplies legibility+consistency. Gate asserts exact match on the 8 expected + only those two extras.
+- Local stack quirk: if `supabase db reset` fails mid-run ("error running container"), auth (GoTrue) and PostgREST are left with stale/broken state — rerun the reset and `docker restart supabase_auth_mbjb-lesen supabase_rest_mbjb-lesen` if 500s persist.
 
 **M6 — the deviation that matters (also OPEN-QUESTIONS #10):** live check proved multimodal glyph-height *estimation* misses ±0.05 badly (Δ0.161/Δ0.328 at confidence ≈0.94). Tolerance NOT widened. Input contract changed: artwork must be an **annotated production proof** (per-run lettering heights printed on the proof). Model reads annotations (`measurement_basis:"annotation"`); estimates or unreadable proofs escalate. Live re-check: Δ0 on both boards, lowres escalates. Harness: `pnpm tsx --env-file=.env.local scripts/measure-signboard-live.ts` (3 real API calls).
 

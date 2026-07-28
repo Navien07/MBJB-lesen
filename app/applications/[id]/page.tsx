@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { submitApplication, uploadDocument } from '../actions'
 import { AppShell } from '@/components/app-shell'
+import { PipelineProgress } from '@/components/pipeline-progress'
 import { StatusBadge } from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -69,6 +70,32 @@ export default async function ApplicationDetailPage({
           </div>
           <StatusBadge status={status} />
         </div>
+
+        <PipelineProgress applicationId={id} initialStatus={status} />
+
+        {application.deficiency_notice && status === 'DEFICIENT' ? (
+          <Card className="border-amber-300 bg-amber-50" data-testid="deficiency-notice">
+            <CardHeader>
+              <CardTitle>Deficiency notice / Notis kekurangan dokumen</CardTitle>
+              <CardDescription>
+                The following must be resolved before your application can proceed:
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="list-disc space-y-1 pl-5 text-sm">
+                {(
+                  application.deficiency_notice as {
+                    deficiencies: Array<{ doc_id: string; label: string; reason: string }>
+                  }
+                ).deficiencies.map((d) => (
+                  <li key={d.doc_id} data-testid={`deficiency-${d.doc_id}`}>
+                    <span className="font-medium">{d.label}</span> — {d.reason}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        ) : null}
 
         <Card>
           <CardHeader>
