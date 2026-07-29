@@ -113,6 +113,43 @@ export default async function ApplicationDetailPage({
           </CardContent>
         </Card>
 
+        {editable ? (
+          <Card className="border-primary/25 bg-primary/5" data-testid="demo-docs">
+            <CardHeader>
+              <CardTitle>Demo documents — try the system</CardTitle>
+              <CardDescription>
+                Download these SPECIMEN files, then drop them into the matching slots below. Use{' '}
+                <span className="font-mono text-emerald-300">demo-board-086.png</span> as the
+                signboard artwork to see a non-compliant ¾-ratio finding, or{' '}
+                <span className="font-mono text-emerald-300">signboard-lowres.png</span> to see the
+                system escalate instead of guessing.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              {[
+                ['ssm-cert.png', 'SSM certificate'],
+                ['cukai-harta-2026.png', 'Cukai harta receipt'],
+                ['mykad.png', 'MyKad (specimen)'],
+                ['demo-board-086.png', 'Signboard proof (0.86)'],
+                ['signboard-lowres.png', 'Signboard (low-res)'],
+                ['dbp-approval.png', 'DBP approval'],
+                ['tenancy.png', 'Tenancy agreement'],
+                ['floorplan.png', 'Floor plan'],
+              ].map(([file, label]) => (
+                <a
+                  key={file}
+                  href={`/demo-docs/${file}`}
+                  download
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs transition-colors hover:border-primary/50 hover:text-emerald-300"
+                >
+                  <span aria-hidden="true" className="text-primary">↓</span>
+                  {label}
+                </a>
+              ))}
+            </CardContent>
+          </Card>
+        ) : null}
+
         <Card>
           <CardHeader>
             <CardTitle>Supporting documents</CardTitle>

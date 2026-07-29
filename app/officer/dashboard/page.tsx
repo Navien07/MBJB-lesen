@@ -27,7 +27,13 @@ export default async function OfficerDashboardPage() {
       supabase.from('findings').select('rule_id'),
       supabase.from('audit_log').select('detail').eq('action', 'finding.overridden'),
       supabase.from('decisions').select('outcome'),
-      supabase.from('audit_log').select('detail').eq('action', 'deficiency.notice_issued'),
+      // audit entries are append-only forever; ignore ones whose application
+      // was since removed (e.g. demo resets) so counts reflect live cases
+      supabase
+        .from('audit_log')
+        .select('detail, application_id')
+        .eq('action', 'deficiency.notice_issued')
+        .not('application_id', 'is', null),
     ])
 
   // override rate per rule — the honest measure of whether the AI is any good
