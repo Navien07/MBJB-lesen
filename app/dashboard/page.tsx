@@ -26,6 +26,7 @@ export default async function DashboardPage({
   const { data: applications } = await supabase
     .from('applications')
     .select('id, company_name, premise_address, status, created_at')
+    .neq('status', 'CLOSED') // archived demo cases stay out of the list
     .order('created_at', { ascending: false })
 
   return (

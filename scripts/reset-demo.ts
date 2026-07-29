@@ -20,16 +20,25 @@ if (!url || !serviceKey) {
 const svc = createClient(url, serviceKey, { auth: { persistSession: false } })
 
 async function main() {
-  // wipe every application; findings/documents/jobs/escalations/decisions cascade
-  const { data: apps } = await svc.from('applications').select('id')
+  // Applications referenced by audit entries cannot be deleted — the delete
+  // would null audit_log.application_id, and the append-only trigger refuses
+  // that UPDATE for every role. The invariant holds even against this script,
+  // so old cases are ARCHIVED to CLOSED and hidden from the demo views.
+  const { data: apps } = await svc.from('applications').select('id').neq('status', 'CLOSED')
   if (apps && apps.length > 0) {
     const { error } = await svc
       .from('applications')
-      .delete()
+      .update({ status: 'CLOSED' })
       .in('id', apps.map((a) => a.id))
-    if (error) throw new Error(`cleanup failed: ${error.message}`)
+    if (error) throw new Error(`archive failed: ${error.message}`)
   }
-  console.log(`removed ${apps?.length ?? 0} applications`)
+  // park any leftover queued/running jobs so the worker never picks them up
+  const { error: jobsError } = await svc
+    .from('jobs')
+    .update({ status: 'parked', last_error: 'archived by demo reset' })
+    .in('status', ['queued', 'running'])
+  if (jobsError) throw new Error(`job parking failed: ${jobsError.message}`)
+  console.log(`archived ${apps?.length ?? 0} applications (audit history preserved)`)
 
   // demo applicant (created by seed-remote; recreate if missing)
   const email = 'applicant-demo-99@mbjb-lesen.local'

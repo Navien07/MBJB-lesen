@@ -18,6 +18,7 @@ export default async function OfficerQueuePage() {
     .from('applications')
     .select('id, company_name, premise_address, business_activity, status, risk_tier, created_at')
     .neq('status', 'DRAFT')
+    .neq('status', 'CLOSED') // archived cases live on in the audit log only
     .order('created_at', { ascending: true })
 
   return (
