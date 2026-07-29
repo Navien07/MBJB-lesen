@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 
 export interface EvidenceObservation {
   id: string
@@ -47,9 +48,14 @@ export interface FindingView {
 
 const SEVERITIES = ['critical', 'major', 'advisory'] as const
 const STATUS_STYLES: Record<FindingView['status'], string> = {
-  compliant: 'bg-green-100 text-green-900',
-  non_compliant: 'bg-red-100 text-red-900',
-  escalated: 'bg-amber-100 text-amber-900',
+  compliant: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300',
+  non_compliant: 'border-red-500/40 bg-red-500/10 text-red-300',
+  escalated: 'border-amber-500/40 bg-amber-500/10 text-amber-300',
+}
+const SEVERITY_RAIL: Record<(typeof SEVERITIES)[number], string> = {
+  critical: 'border-l-red-500/60',
+  major: 'border-l-amber-500/60',
+  advisory: 'border-l-sky-500/50',
 }
 
 function OverrideForm({ finding, applicationId }: { finding: FindingView; applicationId: string }) {
@@ -150,7 +156,7 @@ function EvidenceDialog({ finding, applicationId }: { finding: FindingView; appl
       ) : null}
 
       {finding.override ? (
-        <p className="rounded border border-amber-300 bg-amber-50 p-2 text-sm" data-testid={`overridden-${finding.rule_id}`}>
+        <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-2 text-sm" data-testid={`overridden-${finding.rule_id}`}>
           Overridden as <span className="font-medium">{finding.override.to_status}</span>:{' '}
           {finding.override.reason}
         </p>
@@ -187,14 +193,17 @@ export function FindingsPanel({
                     open={open === finding.id}
                     onOpenChange={(next) => setOpen(next ? finding.id : null)}
                   >
-                    <DialogTrigger asChild>
+    <DialogTrigger asChild>
                       <button
                         type="button"
-                        className="flex w-full items-center justify-between gap-3 rounded-lg border bg-background p-3 text-left hover:bg-muted/50"
+                        className={cn(
+                          'flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border border-l-2 bg-card p-3 text-left transition-colors hover:bg-accent/60',
+                          SEVERITY_RAIL[severity],
+                        )}
                         data-testid={`finding-${finding.rule_id}`}
                       >
                         <span className="min-w-0">
-                          <span className="font-medium">{finding.rule_id}</span>
+                          <span className="font-mono text-sm font-semibold tracking-tight">{finding.rule_id}</span>
                           {finding.corrective_action ? (
                             <span className="block truncate text-xs text-muted-foreground">
                               {finding.corrective_action}
@@ -203,7 +212,7 @@ export function FindingsPanel({
                         </span>
                         <span className="flex shrink-0 items-center gap-2">
                           {finding.override ? (
-                            <Badge variant="outline" className="bg-amber-100 text-amber-900">
+                            <Badge variant="outline" className="border-amber-500/40 bg-amber-500/10 text-amber-300">
                               overridden
                             </Badge>
                           ) : null}

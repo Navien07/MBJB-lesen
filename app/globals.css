@@ -49,82 +49,81 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* MBJB-lesen console theme — dark-first, WCAG-AA+ on all pairs.
+     Slate depth scale + emerald action colour; no decorative gradients. */
+  --background: oklch(0.129 0.042 264.695);          /* slate-950 */
+  --foreground: oklch(0.984 0.003 247.858);          /* slate-50 */
+  --card: oklch(0.208 0.042 265.755);                /* slate-900 */
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.696 0.17 162.48);               /* emerald-500 */
+  --primary-foreground: oklch(0.129 0.042 264.695);
+  --secondary: oklch(0.279 0.041 260.031);           /* slate-800 */
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.711 0.035 256.788);    /* slate-400+ */
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216);          /* red-400 for dark bg */
+  --border: oklch(0.279 0.041 260.031);
+  --input: oklch(0.372 0.044 257.287 / 55%);         /* slate-700/55 */
+  --ring: oklch(0.696 0.17 162.48);
+  --chart-1: oklch(0.696 0.17 162.48);               /* emerald */
+  --chart-2: oklch(0.715 0.143 215.221);             /* cyan */
+  --chart-3: oklch(0.795 0.184 86.047);              /* amber */
+  --chart-4: oklch(0.712 0.194 13.428);              /* rose */
+  --chart-5: oklch(0.711 0.035 256.788);             /* slate */
+  --radius: 0.75rem;
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.696 0.17 162.48);
+  --sidebar-primary-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(0.279 0.041 260.031);
+  --sidebar-ring: oklch(0.696 0.17 162.48);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* single dark theme; tokens defined in :root */
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    color-scheme: dark;
   }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  ::selection {
+    background: oklch(0.696 0.17 162.48 / 30%);
+  }
+}
+
+/* Ambient console backdrop for auth surfaces: a faint emerald bloom over a
+   fine engineering grid. Static by design (no decorative motion). */
+.console-backdrop {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(60rem 32rem at 50% -12rem, oklch(0.696 0.17 162.48 / 9%), transparent 60%),
+    linear-gradient(to right, oklch(0.279 0.041 260.031 / 28%) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.279 0.041 260.031 / 28%) 1px, transparent 1px);
+  background-size: auto, 2.75rem 2.75rem, 2.75rem 2.75rem;
+}
+
+/* Hairline emerald keyline used on header + featured cards */
+.keyline-top {
+  position: relative;
+}
+.keyline-top::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, oklch(0.696 0.17 162.48 / 85%), transparent);
 }

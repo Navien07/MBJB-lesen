@@ -72,7 +72,7 @@ export default async function OfficerDashboardPage() {
       <h1 className="text-lg font-semibold">Licensing dashboard</h1>
 
       {/* deliberately first and full-width: the honest measure of the AI */}
-      <Card data-testid="override-rate">
+      <Card data-testid="override-rate" className="keyline-top">
         <CardHeader>
           <CardTitle>Officer override rate per rule</CardTitle>
           <CardDescription>
@@ -94,10 +94,13 @@ export default async function OfficerDashboardPage() {
               <TableBody>
                 {overrideRows.map((row) => (
                   <TableRow key={row.ruleId} data-testid={`override-row-${row.ruleId}`}>
-                    <TableCell className="font-medium">{row.ruleId}</TableCell>
-                    <TableCell className="text-right">{row.findings}</TableCell>
-                    <TableCell className="text-right">{row.overrides}</TableCell>
-                    <TableCell className="text-right" data-testid={`override-rate-${row.ruleId}`}>
+                    <TableCell className="font-mono font-medium">{row.ruleId}</TableCell>
+                    <TableCell className="text-right font-mono tabular-nums">{row.findings}</TableCell>
+                    <TableCell className="text-right font-mono tabular-nums">{row.overrides}</TableCell>
+                    <TableCell
+                      className={`text-right font-mono font-semibold tabular-nums ${row.overrides > 0 ? 'text-amber-300' : 'text-emerald-300'}`}
+                      data-testid={`override-rate-${row.ruleId}`}
+                    >
                       {rate(row.overrides, row.findings)}
                     </TableCell>
                   </TableRow>

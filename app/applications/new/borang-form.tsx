@@ -56,7 +56,7 @@ export function BorangForm() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Applicant particulars</CardTitle>
+            <CardTitle><span className="mr-2 font-mono text-xs text-primary">01</span>Applicant particulars</CardTitle>
             <CardDescription>Butir-butir pemohon</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
@@ -90,7 +90,7 @@ export function BorangForm() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Business &amp; premise</CardTitle>
+            <CardTitle><span className="mr-2 font-mono text-xs text-primary">02</span>Business &amp; premise</CardTitle>
             <CardDescription>Butir-butir perniagaan dan premis</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
@@ -105,7 +105,7 @@ export function BorangForm() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Signboard</CardTitle>
+            <CardTitle><span className="mr-2 font-mono text-xs text-primary">03</span>Signboard</CardTitle>
             <CardDescription>Ukuran papan iklan</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { AlertTriangle, Check, FileSearch, FileText, Ruler, Scale } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 interface JobRow {
   stage: 'intake' | 'signboard' | 'compliance' | 'copilot'
@@ -17,11 +19,16 @@ interface Progress {
   jobs: JobRow[]
 }
 
-const STAGES: Array<{ key: JobRow['stage']; label: string; description: string }> = [
-  { key: 'intake', label: 'Intake & classification', description: 'Checklist, legibility, consistency' },
-  { key: 'signboard', label: 'Signboard analysis', description: 'Text runs and lettering heights' },
-  { key: 'compliance', label: 'Compliance assessment', description: 'Deterministic rule engine' },
-  { key: 'copilot', label: 'Officer brief', description: 'Draft brief and letter' },
+const STAGES: Array<{
+  key: JobRow['stage']
+  label: string
+  description: string
+  Icon: typeof FileSearch
+}> = [
+  { key: 'intake', label: 'Intake & classification', description: 'Checklist, legibility, consistency', Icon: FileSearch },
+  { key: 'signboard', label: 'Signboard analysis', description: 'Text runs and lettering heights', Icon: Ruler },
+  { key: 'compliance', label: 'Compliance assessment', description: 'Deterministic rule engine', Icon: Scale },
+  { key: 'copilot', label: 'Officer brief', description: 'Draft brief and letter', Icon: FileText },
 ]
 
 const ACTIVE_STATUSES = ['SUBMITTED', 'INTAKE_CHECK', 'ANALYSING']
@@ -67,7 +74,7 @@ export function PipelineProgress({ applicationId, initialStatus }: { application
   const jobs = progress?.jobs ?? []
 
   return (
-    <Card data-testid="pipeline-progress">
+    <Card data-testid="pipeline-progress" className="keyline-top">
       <CardHeader>
         <CardTitle>Processing your application</CardTitle>
         <CardDescription>
@@ -75,38 +82,57 @@ export function PipelineProgress({ applicationId, initialStatus }: { application
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ol className="space-y-3">
-          {STAGES.map((stage) => {
+        <ol className="relative space-y-0">
+          {STAGES.map((stage, index) => {
             const job = stageState(jobs, stage.key)
             const state = job?.status ?? 'pending'
-            const marker =
-              state === 'done' ? '✓' : state === 'running' ? '●' : state === 'parked' ? '⚠' : '○'
+            const isLast = index === STAGES.length - 1
             return (
               <li
                 key={stage.key}
-                className="flex items-start gap-3"
+                className="relative flex gap-4 pb-6 last:pb-0"
                 data-testid={`stage-${stage.key}`}
                 data-state={state}
               >
+                {!isLast ? (
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'absolute top-9 left-[17px] h-[calc(100%-2.25rem)] w-px',
+                      state === 'done' ? 'bg-primary/50' : 'bg-border',
+                    )}
+                  />
+                ) : null}
                 <span
-                  className={
-                    state === 'done'
-                      ? 'text-green-600'
-                      : state === 'running'
-                        ? 'animate-pulse text-blue-600'
-                        : state === 'parked'
-                          ? 'text-amber-600'
-                          : 'text-muted-foreground'
-                  }
+                  className={cn(
+                    'z-10 flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors',
+                    state === 'done' && 'border-primary/50 bg-primary/15 text-emerald-300',
+                    state === 'running' && 'animate-pulse border-primary bg-primary/20 text-emerald-200',
+                    state === 'parked' && 'border-amber-500/50 bg-amber-500/15 text-amber-300',
+                    (state === 'pending' || state === 'queued') && 'border-border bg-card text-muted-foreground',
+                  )}
                 >
-                  {marker}
+                  {state === 'done' ? (
+                    <Check className="size-4" aria-hidden="true" />
+                  ) : state === 'parked' ? (
+                    <AlertTriangle className="size-4" aria-hidden="true" />
+                  ) : (
+                    <stage.Icon className="size-4" aria-hidden="true" />
+                  )}
                 </span>
-                <div>
-                  <p className="text-sm font-medium">{stage.label}</p>
+                <div className="pt-1">
+                  <p className="flex items-center gap-2 text-sm font-medium">
+                    <span className="font-mono text-[11px] text-muted-foreground">
+                      0{index + 1}
+                    </span>
+                    {stage.label}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {state === 'parked'
                       ? 'Paused for an officer to look at — no action needed from you.'
-                      : stage.description}
+                      : state === 'running'
+                        ? 'Running…'
+                        : stage.description}
                   </p>
                 </div>
               </li>

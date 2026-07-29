@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { signIn, type AuthFormState } from '../actions'
+import { AuthFrame } from '../auth-frame'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -14,12 +15,12 @@ export default function LoginPage() {
   const [state, formAction, pending] = useActionState(signIn, initialState)
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
-      <Card className="w-full max-w-sm">
+    <AuthFrame>
+      <Card className="keyline-top border-border/70 bg-card/80 shadow-2xl shadow-black/40 backdrop-blur">
         <CardHeader>
-          <CardTitle>MBJB-lesen</CardTitle>
+          <CardTitle className="text-base">Sign in</CardTitle>
           <CardDescription>
-            Sign in to manage business premise and signboard licence applications
+            Manage business premise and signboard licence applications
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -43,18 +44,21 @@ export default function LoginPage() {
                 {state.error}
               </p>
             ) : null}
-            <Button type="submit" className="w-full" disabled={pending}>
+            <Button type="submit" className="w-full font-semibold" disabled={pending}>
               {pending ? 'Signing in…' : 'Sign in'}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
             New applicant?{' '}
-            <Link href="/register" className="underline">
+            <Link
+              href="/register"
+              className="text-foreground underline decoration-primary/60 underline-offset-4 hover:decoration-primary"
+            >
               Create an account
             </Link>
           </p>
         </CardContent>
       </Card>
-    </main>
+    </AuthFrame>
   )
 }

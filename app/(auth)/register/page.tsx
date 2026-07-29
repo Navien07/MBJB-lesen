@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { register, type AuthFormState } from '../actions'
+import { AuthFrame } from '../auth-frame'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -14,12 +15,12 @@ export default function RegisterPage() {
   const [state, formAction, pending] = useActionState(register, initialState)
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
-      <Card className="w-full max-w-sm">
+    <AuthFrame>
+      <Card className="keyline-top border-border/70 bg-card/80 shadow-2xl shadow-black/40 backdrop-blur">
         <CardHeader>
-          <CardTitle>Create applicant account</CardTitle>
+          <CardTitle className="text-base">Create applicant account</CardTitle>
           <CardDescription>
-            Apply for a Lesen Premis Perniagaan &amp; Iklan with Majlis Bandaraya Johor Bahru
+            Apply for a Lesen Premis Perniagaan &amp; Iklan
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -48,18 +49,21 @@ export default function RegisterPage() {
                 {state.error}
               </p>
             ) : null}
-            <Button type="submit" className="w-full" disabled={pending}>
+            <Button type="submit" className="w-full font-semibold" disabled={pending}>
               {pending ? 'Creating…' : 'Create account'}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
             Already registered?{' '}
-            <Link href="/login" className="underline">
+            <Link
+              href="/login"
+              className="text-foreground underline decoration-primary/60 underline-offset-4 hover:decoration-primary"
+            >
               Sign in
             </Link>
           </p>
         </CardContent>
       </Card>
-    </main>
+    </AuthFrame>
   )
 }

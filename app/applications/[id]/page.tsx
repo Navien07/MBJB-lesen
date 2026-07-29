@@ -74,7 +74,7 @@ export default async function ApplicationDetailPage({
         <PipelineProgress applicationId={id} initialStatus={status} />
 
         {application.deficiency_notice && status === 'DEFICIENT' ? (
-          <Card className="border-amber-300 bg-amber-50" data-testid="deficiency-notice">
+          <Card className="border-amber-500/40 bg-amber-500/10" data-testid="deficiency-notice">
             <CardHeader>
               <CardTitle>Deficiency notice / Notis kekurangan dokumen</CardTitle>
               <CardDescription>
@@ -136,7 +136,11 @@ export default async function ApplicationDetailPage({
                         )}
                       </p>
                       {uploaded ? (
-                        <Badge variant="outline" className="mt-1 bg-green-100 text-green-900" data-testid={`uploaded-${doc.docId}`}>
+                        <Badge
+                          variant="outline"
+                          className="mt-1 border-emerald-500/40 bg-emerald-500/10 font-mono text-xs text-emerald-300"
+                          data-testid={`uploaded-${doc.docId}`}
+                        >
                           {uploaded.filename}
                         </Badge>
                       ) : (
@@ -169,7 +173,7 @@ export default async function ApplicationDetailPage({
         </Card>
 
         {editable ? (
-          <div className="flex items-center justify-between rounded-lg border bg-background p-4">
+          <div className="keyline-top flex items-center justify-between rounded-xl border bg-card p-4">
             <p className="text-sm text-muted-foreground" data-testid="submit-hint">
               {missingMandatory.length > 0
                 ? `${missingMandatory.length} mandatory document(s) still required`

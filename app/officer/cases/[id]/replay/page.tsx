@@ -9,9 +9,9 @@ import { supabaseServer } from '@/lib/supabase/server'
 export const dynamic = 'force-dynamic'
 
 const ACTOR_STYLES: Record<string, string> = {
-  human: 'bg-blue-100 text-blue-900',
-  agent: 'bg-purple-100 text-purple-900',
-  system: 'bg-muted text-muted-foreground',
+  human: 'border-sky-500/40 bg-sky-500/10 text-sky-300',
+  agent: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300',
+  system: 'border-border bg-muted text-muted-foreground',
 }
 
 export default async function AuditReplayPage({
@@ -68,7 +68,7 @@ export default async function AuditReplayPage({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ol className="space-y-3">
+          <ol className="relative space-y-3 border-l border-border/70 pl-5">
             {(entries ?? []).map((entry) => {
               const detail = entry.detail as Record<string, unknown>
               const reason = typeof detail.reason === 'string' ? detail.reason : null
@@ -77,7 +77,11 @@ export default async function AuditReplayPage({
                   ? (nameById.get(entry.actor_id ?? '') ?? entry.actor_id)
                   : entry.actor_id
               return (
-                <li key={entry.id} className="rounded-lg border p-3" data-testid={`replay-${entry.action}`}>
+                <li key={entry.id} className="relative rounded-lg border bg-card p-3" data-testid={`replay-${entry.action}`}>
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-5 -left-[calc(1.25rem+3.5px)] size-1.5 rounded-full bg-primary/70"
+                  />
                   <div className="flex flex-wrap items-center gap-2 text-sm">
                     <span className="font-mono text-xs text-muted-foreground">
                       {new Date(entry.created_at).toLocaleString('en-MY')}
@@ -85,7 +89,7 @@ export default async function AuditReplayPage({
                     <Badge variant="outline" className={ACTOR_STYLES[entry.actor_type]}>
                       {entry.actor_type}: {actorName}
                     </Badge>
-                    <span className="font-medium">{entry.action}</span>
+                    <span className="font-mono text-sm font-medium">{entry.action}</span>
                     {entry.model_version ? (
                       <Badge variant="outline" data-testid="model-version">
                         model {entry.model_version}
