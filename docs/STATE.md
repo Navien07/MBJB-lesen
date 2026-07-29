@@ -1,6 +1,8 @@
 # Session state
 
 **Last gate passed:** M7 (order so far: M0, M1, M4, M2, M3, M5, M6, M7). Worker in `lib/pipeline/worker.ts` — one stage per invocation, optimistic claim, retry×2 then park. Progress route `app/api/applications/[id]/progress` advances one tick per poll (job rows + polling, §5). Gate: `pnpm tsx scripts/e2e-pipeline.ts --fixture demo-case`.
+**Demo mode note (2026-07-29):** production currently runs `AI_GATEWAY_MODE=replay` (deterministic simulator) so the full flow works without API credits — flip the Vercel env back to `live` + redeploy once credits are added, then run the smoke below. Demo tooling: `scripts/reset-demo.ts` (archive-and-reseed; applications referenced by audit entries are physically undeletable — the append-only trigger blocks the FK SET NULL), sample documents in `public/demo-docs/` surfaced on the application page.
+
 **Next gate:** M10 — BLOCKED ON ANTHROPIC CREDITS, everything else done. `./scripts/verify.sh` exits 0 (all local gates). Production is live at https://mbjb-lesen.vercel.app (migrations pushed, env set, seeded: demo officer `officer.demo@mbjb-lesen.local` + 10 synthetic cases + demo case). The @live smoke ran end-to-end in production — register, Borang, 7 uploads, submit all green — until the intake stage's real API call failed: **"credit balance is too low to access the Anthropic API"**. The job retried ×3 and parked (the failure handling proved itself in production). M6's live check earlier consumed the remaining balance.
 
 **To finish M10 after adding credits at console.anthropic.com:**
