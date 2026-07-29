@@ -35,6 +35,18 @@ test('an officer reaches the queue', async ({ page }) => {
   await expect(page.getByTestId('officer-queue-title')).toBeVisible()
 })
 
+test('demo access buttons sign in directly by role', async ({ page }) => {
+  await page.goto('/login')
+  await page.getByTestId('demo-login-officer').click()
+  await expect(page).toHaveURL(/\/officer/)
+  await expect(page.getByTestId('officer-queue-title')).toBeVisible()
+  await page.getByRole('button', { name: 'Sign out' }).click()
+  await expect(page).toHaveURL(/\/login/)
+
+  await page.getByTestId('demo-login-applicant').click()
+  await expect(page).toHaveURL(/\/dashboard/)
+})
+
 test('a new applicant can register and lands on an empty dashboard', async ({ page }) => {
   const unique = `register-${Date.now()}@e2e.mbjb.local`
   await page.goto('/register')

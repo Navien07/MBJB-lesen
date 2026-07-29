@@ -64,3 +64,33 @@ export async function signOut(): Promise<void> {
   await supabase.auth.signOut()
   redirect('/login')
 }
+
+/**
+ * One-click demo access (POC only). Credentials live in server env vars —
+ * DEMO_OFFICER_EMAIL/PASSWORD and DEMO_APPLICANT_EMAIL/PASSWORD — so nothing
+ * ships in the client bundle. Remove for any production rollout.
+ */
+export async function demoSignIn(
+  _prev: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  const role = String(formData.get('role') ?? '')
+  const creds =
+    role === 'officer'
+      ? { email: process.env.DEMO_OFFICER_EMAIL, password: process.env.DEMO_OFFICER_PASSWORD }
+      : role === 'applicant'
+        ? { email: process.env.DEMO_APPLICANT_EMAIL, password: process.env.DEMO_APPLICANT_PASSWORD }
+        : null
+  if (!creds?.email || !creds.password) {
+    return { error: 'Demo accounts are not configured in this environment.' }
+  }
+
+  const supabase = await supabaseServer()
+  const { error } = await supabase.auth.signInWithPassword({
+    email: creds.email,
+    password: creds.password,
+  })
+  if (error) return { error: `Demo sign-in failed: ${error.message}` }
+
+  redirect(role === 'officer' ? '/officer' : '/dashboard')
+}
